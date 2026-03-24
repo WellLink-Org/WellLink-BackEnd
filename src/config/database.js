@@ -500,6 +500,18 @@ const TABLE_DEFINITIONS = {
       UNIQUE (user_id, timestamp_start, source)
     )`,
 
+  users: `
+  CREATE TABLE IF NOT EXISTS users (
+    user_id TEXT PRIMARY KEY,
+    email TEXT NOT NULL,
+    name TEXT NOT NULL,
+    picture TEXT,
+    provider TEXT,
+    role TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (user_id, email, name)
+  )`,
+
   dietaryCalories: dietaryTable("dietary_calories", "value_kcal"),
   dietaryCarbs: dietaryTable("dietary_carbs", "value_grams"),
   dietaryProtein: dietaryTable("dietary_protein", "value_grams"),
@@ -1060,6 +1072,50 @@ async function loadFromTable(dataType, userId) {
   }
 }
 
+async function createUser({ auth0Id, email, name, picture, provider, role }) {
+  const query = `
+    INSERT INTO users (user_id, email, name, picture, provider, role)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    ON CONFLICT (user_id) DO NOTHING
+    RETURNING *;
+  `;
+
+  const values = [
+    auth0Id,
+    email,
+    name,
+    picture ?? null,
+    provider,
+    (role = "user"),
+  ];
+
+  try {
+    const { rows } = await pool.query(query, values);
+    return rows[0] || null;
+  } catch (err) {
+    console.error("Error inserting user:", err);
+    throw err;
+  }
+}
+
+async function updateUserRole(auth0Id, role) {
+  const query = `
+    UPDATE users
+    SET role = $2
+    WHERE user_id = $1
+    RETURNING *;
+  `;
+  const values = [auth0Id, role];
+
+  try {
+    const { rows } = await pool.query(query, values);
+    return rows[0] || null;
+  } catch (err) {
+    console.error("Error updating user role:", err);
+    throw err;
+  }
+}
+
 async function initDB() {
   // Run all CREATE TABLE statements
   for (const sql of Object.values(TABLE_DEFINITIONS)) {
@@ -1068,4 +1124,12 @@ async function initDB() {
   console.log(`${Object.keys(TABLE_DEFINITIONS).length} tables ready`);
 }
 
-module.exports = { pool, initDB, buildInsert, loadFromTable, TABLE_NAMES };
+module.exports = {
+  pool,
+  initDB,
+  buildInsert,
+  loadFromTable,
+  TABLE_NAMES,
+  createUser,
+  updateUserRole,
+};

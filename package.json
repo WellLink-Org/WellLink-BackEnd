@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "exceljs": "^4.4.0",
     "express": "^5.2.1",
+    "express-oauth2-jwt-bearer": "^1.7.4",
     "nodemon": "^3.1.14",
     "pg": "^8.20.0"
   }
