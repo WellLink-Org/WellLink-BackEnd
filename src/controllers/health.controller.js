@@ -39,3 +39,12 @@ exports.exportExcel = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getDashboardNames = async (req, res, next) => {
+  try {
+    const data = await healthService.getHealthNames();
+    return res.json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+};

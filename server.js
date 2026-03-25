@@ -5,11 +5,19 @@ const routes = require("./src/routes");
 const errorMiddleware = require("./src/middleware/error.middleware");
 const { auth } = require("express-oauth2-jwt-bearer");
 const authController = require("./src/controllers/auth.controller");
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 4200;
 
 app.use(express.json({ limit: "50mb" }));
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  }),
+);
 
 const jwtCheck = auth({
   audience: process.env.PRODUCT_URL,

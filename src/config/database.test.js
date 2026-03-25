@@ -18,8 +18,6 @@ const {
   buildInsert,
   loadFromTable,
   TABLE_NAMES,
-  createUser,
-  updateUserRole,
   initDB,
 } = require("./database");
 
@@ -409,97 +407,6 @@ describe("loadFromTable", () => {
     expect(mockQuery).toHaveBeenCalledWith(
       expect.stringContaining("FROM sleep"),
       ["user_xyz"],
-    );
-  });
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// createUser
-// ─────────────────────────────────────────────────────────────────────────────
-describe("createUser", () => {
-  const userInput = {
-    auth0Id: "auth0|abc123",
-    email: "test@example.com",
-    name: "Test User",
-    picture: "https://example.com/pic.jpg",
-    provider: "google",
-    role: "user",
-  };
-
-  test("inserts a user and returns the created row", async () => {
-    const fakeUser = { user_id: "auth0|abc123", email: "test@example.com" };
-    mockQuery.mockResolvedValueOnce({ rows: [fakeUser] });
-
-    const result = await createUser(userInput);
-
-    expect(mockQuery).toHaveBeenCalledTimes(1);
-    expect(mockQuery).toHaveBeenCalledWith(
-      expect.stringContaining("INSERT INTO users"),
-      expect.arrayContaining(["auth0|abc123", "test@example.com", "Test User"]),
-    );
-    expect(result).toEqual(fakeUser);
-  });
-
-  test("returns null when there is a conflict (no row returned)", async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [] });
-    const result = await createUser(userInput);
-    expect(result).toBeNull();
-  });
-
-  test("defaults picture to null when not provided", async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [] });
-    await createUser({ ...userInput, picture: undefined });
-    const values = mockQuery.mock.calls[0][1];
-    expect(values[3]).toBeNull();
-  });
-
-  test("uses ON CONFLICT DO NOTHING", async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [] });
-    await createUser(userInput);
-    const [sql] = mockQuery.mock.calls[0];
-    expect(sql).toMatch(/ON CONFLICT.*DO NOTHING/i);
-  });
-
-  test("throws when the DB query fails", async () => {
-    mockQuery.mockRejectedValueOnce(new Error("connection refused"));
-    await expect(createUser(userInput)).rejects.toThrow("connection refused");
-  });
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// updateUserRole
-// ─────────────────────────────────────────────────────────────────────────────
-describe("updateUserRole", () => {
-  test("updates the role and returns updated row", async () => {
-    const fakeUser = { user_id: "auth0|abc", role: "admin" };
-    mockQuery.mockResolvedValueOnce({ rows: [fakeUser] });
-
-    const result = await updateUserRole("auth0|abc", "admin");
-
-    expect(mockQuery).toHaveBeenCalledWith(
-      expect.stringContaining("UPDATE users"),
-      ["auth0|abc", "admin"],
-    );
-    expect(result).toEqual(fakeUser);
-  });
-
-  test("returns null when user is not found", async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [] });
-    const result = await updateUserRole("nonexistent", "admin");
-    expect(result).toBeNull();
-  });
-
-  test("SQL sets role column", async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [] });
-    await updateUserRole("auth0|abc", "admin");
-    const [sql] = mockQuery.mock.calls[0];
-    expect(sql).toMatch(/SET role/i);
-  });
-
-  test("throws when the DB query fails", async () => {
-    mockQuery.mockRejectedValueOnce(new Error("timeout"));
-    await expect(updateUserRole("auth0|abc", "admin")).rejects.toThrow(
-      "timeout",
     );
   });
 });

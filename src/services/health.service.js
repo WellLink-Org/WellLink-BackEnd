@@ -41,4 +41,13 @@ async function syncHealthData(userId, data) {
   }
 }
 
-module.exports = { saveRecords, loadAllRecords, syncHealthData };
+async function getHealthNames() {
+  return DATA_TYPES;
+}
+
+module.exports = {
+  saveRecords,
+  loadAllRecords,
+  syncHealthData,
+  getHealthNames,
+};
