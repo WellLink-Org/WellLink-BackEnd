@@ -1,9 +1,9 @@
-const pool = require("../config/database");
+const { pool } = require("../config/database");
 
 async function createUser({ auth0Id, email, name, picture, provider, role }) {
   const query = `
-    INSERT INTO users (user_id, email, name, picture, provider, role)
-    VALUES ($1, $2, $3, $4, $5, $6)
+    INSERT INTO users (user_id, email, name, picture, provider, role, role_updated)
+    VALUES ($1, $2, $3, $4, $5, $6,$7)
     ON CONFLICT (user_id) DO NOTHING
     RETURNING *;
   `;
@@ -15,20 +15,8 @@ async function createUser({ auth0Id, email, name, picture, provider, role }) {
     picture ?? null,
     provider,
     (role = "user"),
+    false,
   ];
-
-  const { rows } = await pool.query(query, values);
-  return rows[0] || null;
-}
-
-async function updateUserRole(auth0Id, role) {
-  const query = `
-    UPDATE users
-    SET role = $2
-    WHERE user_id = $1
-    RETURNING *;
-  `;
-  const values = [auth0Id, role];
 
   const { rows } = await pool.query(query, values);
   return rows[0] || null;
@@ -36,5 +24,4 @@ async function updateUserRole(auth0Id, role) {
 
 module.exports = {
   createUser,
-  updateUserRole,
 };

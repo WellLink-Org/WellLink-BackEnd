@@ -1,7 +1,4 @@
-const {
-  createUser,
-  updateUserRole,
-} = require("../repositories/auth.repository");
+const { createUser } = require("../repositories/auth.repository");
 
 async function create({ auth0Id, email, name, picture, provider, role }) {
   const result = await createUser({
@@ -17,11 +14,4 @@ async function create({ auth0Id, email, name, picture, provider, role }) {
   return result;
 }
 
-async function updateRole(auth0Id, role) {
-  const result = await updateUserRole(auth0Id, role);
-  if (!result) throw new Error("User role update failed");
-
-  return result;
-}
-
-module.exports = { create, updateRole };
+module.exports = { create };

@@ -4,7 +4,7 @@ const excelService = require("../services/excel.service");
 exports.sync = async (req, res, next) => {
   try {
     const data = req.body;
-    const userId = data.userId || "user_123";
+    const userId = data.userId;
     console.log(`Received sync for: ${userId}`);
 
     await healthService.syncHealthData(userId, data);
@@ -16,7 +16,7 @@ exports.sync = async (req, res, next) => {
 
 exports.exportExcel = async (req, res, next) => {
   try {
-    const userId = req.params.userId || "user_123";
+    const userId = req.params.userId;
     const data = await healthService.loadAllRecords(userId);
 
     if (Object.keys(data).length === 0) {

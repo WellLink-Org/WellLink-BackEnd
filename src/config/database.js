@@ -508,6 +508,7 @@ const TABLE_DEFINITIONS = {
     picture TEXT,
     provider TEXT,
     role TEXT,
+    role_updated BOOLEAN,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE (user_id, email, name)
   )`,
