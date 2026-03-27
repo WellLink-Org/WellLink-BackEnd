@@ -4,6 +4,7 @@ const excelService = require("../services/excel.service");
 exports.sync = async (req, res, next) => {
   try {
     const data = req.body;
+    console.log("gyugdyugdyugduygyde", data);
     const userId = data.userId;
     console.log(`Received sync for: ${userId}`);
 
