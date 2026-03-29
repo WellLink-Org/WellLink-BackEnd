@@ -111,7 +111,8 @@ const TABLE_DEFINITIONS = {
       position_x   INT  NOT NULL DEFAULT 0,
       position_y   INT  NOT NULL DEFAULT 0,
       width        INT  NOT NULL DEFAULT 1,
-      height       INT  NOT NULL DEFAULT 1
+      height       INT  NOT NULL DEFAULT 1,
+      size_variant TEXT
     )`,
 
   feedback_threads: `
