@@ -13,12 +13,8 @@ exports.getDashboard = async (req, res, next) => {
 exports.getWidget = async (req, res, next) => {
   try {
     const { dataType, days = "30" } = req.query;
-    const data = req.body;
-    const result = await dashboardService.getWidget(
-      data.userId,
-      dataType,
-      days,
-    );
+    const userId = req.params.userId;
+    const result = await dashboardService.getWidgetData(userId, dataType, days);
     res.json({ success: true, data: result });
   } catch (err) {
     next(err);

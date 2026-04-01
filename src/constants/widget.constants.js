@@ -25,7 +25,174 @@ export const WIDGET_REGISTRY = {
     },
   },
 
-  // ... add other widget definitions here
+  bar_chart: {
+    widgetType: "bar_chart",
+    label: "Bar Chart",
+    defaultSize: "medium",
+    allowedSizes: ["medium", "large", "wide"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 6, h: 3 },
+      large: { w: 8, h: 4 },
+      wide: { w: 12, h: 3 },
+    },
+  },
+
+  habit_streak: {
+    widgetType: "habit_streak",
+    label: "Habit Streak",
+    defaultSize: "small",
+    allowedSizes: ["small", "medium"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 4, h: 3 },
+      large: { w: 6, h: 4 },
+      wide: { w: 6, h: 2 },
+    },
+  },
+
+  event_timeline: {
+    widgetType: "event_timeline",
+    label: "Event Timeline",
+    defaultSize: "small",
+    allowedSizes: ["small", "medium"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 5, h: 3 },
+      large: { w: 6, h: 4 },
+      wide: { w: 8, h: 3 },
+    },
+  },
+
+  range_gauge: {
+    widgetType: "range_gauge",
+    label: "Range Gauge",
+    defaultSize: "small",
+    allowedSizes: ["small", "medium"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 4, h: 3 },
+      large: { w: 5, h: 4 },
+      wide: { w: 6, h: 2 },
+    },
+  },
+
+  vital_panel: {
+    widgetType: "vital_panel",
+    label: "Vital Panel",
+    defaultSize: "medium",
+    allowedSizes: ["small", "medium", "large"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 5, h: 3 },
+      large: { w: 6, h: 4 },
+      wide: { w: 8, h: 3 },
+    },
+  },
+
+  body_composition: {
+    widgetType: "body_composition",
+    label: "Body Composition",
+    defaultSize: "medium",
+    allowedSizes: ["medium", "large", "wide"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 6, h: 3 },
+      large: { w: 8, h: 4 },
+      wide: { w: 12, h: 3 },
+    },
+  },
+
+  sleep_bands: {
+    widgetType: "sleep_bands",
+    label: "Sleep Analysis",
+    defaultSize: "wide",
+    allowedSizes: ["large", "wide"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 5, h: 3 },
+      large: { w: 8, h: 4 },
+      wide: { w: 12, h: 3 },
+    },
+  },
+
+  workout_log: {
+    widgetType: "workout_log",
+    label: "Workout Log",
+    defaultSize: "medium",
+    allowedSizes: ["medium", "large", "wide"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 6, h: 3 },
+      large: { w: 8, h: 4 },
+      wide: { w: 12, h: 3 },
+    },
+  },
+
+  dietary_breakdown: {
+    widgetType: "dietary_breakdown",
+    label: "Nutrition Breakdown",
+    defaultSize: "medium",
+    allowedSizes: ["medium", "large", "wide"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 6, h: 3 },
+      large: { w: 8, h: 4 },
+      wide: { w: 12, h: 3 },
+    },
+  },
+
+  hydration_ring: {
+    widgetType: "hydration_ring",
+    label: "Hydration",
+    defaultSize: "small",
+    allowedSizes: ["small", "medium"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 4, h: 3 },
+      large: { w: 5, h: 4 },
+      wide: { w: 6, h: 2 },
+    },
+  },
+
+  audio_exposure: {
+    widgetType: "audio_exposure",
+    label: "Audio Exposure",
+    defaultSize: "small",
+    allowedSizes: ["small", "medium"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 5, h: 3 },
+      large: { w: 6, h: 4 },
+      wide: { w: 8, h: 3 },
+    },
+  },
+
+  symptom_severity: {
+    widgetType: "symptom_severity",
+    label: "Symptom Severity",
+    defaultSize: "small",
+    allowedSizes: ["small", "medium"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 5, h: 3 },
+      large: { w: 6, h: 4 },
+      wide: { w: 8, h: 3 },
+    },
+  },
+
+  reproductive_log: {
+    widgetType: "reproductive_log",
+    label: "Reproductive Health",
+    defaultSize: "small",
+    allowedSizes: ["small", "medium"],
+    sizeMap: {
+      small: { w: 3, h: 2 },
+      medium: { w: 5, h: 3 },
+      large: { w: 6, h: 4 },
+      wide: { w: 8, h: 3 },
+    },
+  },
 };
 
 // DATA TYPE → WIDGET TYPE mapping

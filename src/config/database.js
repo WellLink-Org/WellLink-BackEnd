@@ -34,7 +34,7 @@ const TABLE_DEFINITIONS = {
   health_samples: `
     CREATE TABLE IF NOT EXISTS health_samples (
       id             BIGSERIAL PRIMARY KEY,
-      user_id        TEXT        NOT NULL REFERENCES users(user_id),
+      user_id        TEXT        NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
       type           TEXT        NOT NULL,
       category       TEXT        NOT NULL,
       recorded_date  DATE        NOT NULL,
@@ -55,7 +55,7 @@ const TABLE_DEFINITIONS = {
   workouts: `
     CREATE TABLE IF NOT EXISTS workouts (
       id               BIGSERIAL PRIMARY KEY,
-      user_id          TEXT        NOT NULL REFERENCES users(user_id),
+      user_id          TEXT        NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
       recorded_date    DATE        NOT NULL,
       started_at       TIMESTAMPTZ NOT NULL,
       ended_at         TIMESTAMPTZ,
@@ -72,8 +72,8 @@ const TABLE_DEFINITIONS = {
   sharing_grants: `
     CREATE TABLE IF NOT EXISTS sharing_grants (
       id               UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
-      owner_id         TEXT        NOT NULL REFERENCES users(user_id),
-      recipient_id     TEXT        NOT NULL REFERENCES users(user_id),
+      owner_id         TEXT        NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+      recipient_id     TEXT        NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
       data_scope       TEXT        NOT NULL DEFAULT 'all',
       permission_level TEXT        NOT NULL DEFAULT 'read',
       expires_at       TIMESTAMPTZ,
@@ -83,8 +83,8 @@ const TABLE_DEFINITIONS = {
   user_networks: `
     CREATE TABLE IF NOT EXISTS user_networks (
       id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      user_id      TEXT NOT NULL REFERENCES users(user_id),
-      contact_id   TEXT NOT NULL REFERENCES users(user_id),
+      user_id      TEXT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+      contact_id   TEXT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
       role         TEXT NOT NULL,
       status       TEXT NOT NULL DEFAULT 'pending',
       created_at   TIMESTAMPTZ DEFAULT NOW(),
@@ -94,7 +94,7 @@ const TABLE_DEFINITIONS = {
   dashboards: `
     CREATE TABLE IF NOT EXISTS dashboards (
       id         UUID    PRIMARY KEY DEFAULT gen_random_uuid(),
-      user_id    TEXT    NOT NULL REFERENCES users(user_id),
+      user_id    TEXT    NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
       name       TEXT    NOT NULL,
       is_default BOOLEAN NOT NULL DEFAULT FALSE,
       layout     JSONB,
@@ -118,8 +118,8 @@ const TABLE_DEFINITIONS = {
   feedback_threads: `
     CREATE TABLE IF NOT EXISTS feedback_threads (
       id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      patient_id TEXT NOT NULL REFERENCES users(user_id),
-      doctor_id  TEXT NOT NULL REFERENCES users(user_id),
+      patient_id TEXT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+      doctor_id  TEXT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
       status     TEXT NOT NULL DEFAULT 'open',
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`,
@@ -128,7 +128,7 @@ const TABLE_DEFINITIONS = {
     CREATE TABLE IF NOT EXISTS feedback_messages (
       id                UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
       thread_id         UUID        NOT NULL REFERENCES feedback_threads(id) ON DELETE CASCADE,
-      sender_id         TEXT        NOT NULL REFERENCES users(user_id),
+      sender_id         TEXT        NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
       content           TEXT,
       attached_snapshot JSONB,
       sent_at           TIMESTAMPTZ DEFAULT NOW()
@@ -137,7 +137,7 @@ const TABLE_DEFINITIONS = {
   ai_insights: `
     CREATE TABLE IF NOT EXISTS ai_insights (
       id           UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
-      user_id      TEXT        NOT NULL REFERENCES users(user_id),
+      user_id      TEXT        NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
       insight_type TEXT        NOT NULL,
       content      TEXT,
       context      JSONB,

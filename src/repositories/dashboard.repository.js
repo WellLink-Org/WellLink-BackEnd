@@ -96,15 +96,23 @@ async function getDashboard(userId) {
        ) AS widgets
      FROM dashboards d
      JOIN dashboard_widgets w ON w.dashboard_id = d.id
-     WHERE d.user_id = $1 AND d.is_default = true
+     WHERE d.user_id = $1
      GROUP BY d.id`,
     [userId],
   );
-  return Response.json(dashboard);
+
+  return dashboard;
 }
 
 async function updateWidgets(widgets) {
   for (const widget of widgets) {
+    console.log(
+      "Updating widget",
+      widget.id,
+      "to position",
+      widget.x,
+      widget.y,
+    );
     await pool.query(
       `UPDATE dashboard_widgets 
        SET position_x=$1, position_y=$2, width=$3, height=$4, size_variant=$5
@@ -115,16 +123,34 @@ async function updateWidgets(widgets) {
   return Response.json({ ok: true });
 }
 
+function toSnakeCase(str) {
+  return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+}
+
 async function getWidget(userId, dataType, days) {
-  const { rows } = await pool.query(
-    `SELECT sampled_at, value, value2, stage, unit
+  const dbType = toSnakeCase(dataType);
+  if (dataType === "workouts") {
+    const { rows } = await pool.query(
+      `SELECT id, recorded_date, started_at, ended_at,type,duration_minutes,calories_kcal,distance_km,source
+       FROM workouts
+       WHERE user_id=$1 AND recorded_date > NOW() - INTERVAL '${days} days'
+       ORDER BY recorded_date DESC`,
+      [userId],
+    );
+
+    return rows;
+  } else {
+    const { rows } = await pool.query(
+      `SELECT sampled_at, value, value2, stage, unit
      FROM health_samples
      WHERE user_id=$1 AND type=$2
        AND sampled_at > NOW() - INTERVAL '${days} days'
      ORDER BY sampled_at`,
-    [userId, dataType],
-  );
-  return Response.json(rows);
+      [userId, dbType],
+    );
+
+    return rows;
+  }
 }
 
 module.exports = {
